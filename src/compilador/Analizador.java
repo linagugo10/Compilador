@@ -21,6 +21,8 @@ public class Analizador {
     
     public void analizar(String cadena){
         
+        System.out.println("Analizar");
+        
         int estado = 0;
         int decimal = 0;
         int numero_token = 0;
@@ -29,50 +31,17 @@ public class Analizador {
         String [] lineas = separador(cadena, '\n');
         
         for (int i = 0; i < lineas.length; i++){ //RECORRE CADA VEZ QUE ENCUENTRA UNA NUEVA LINEA
-            for (int j = 0; j < lineas[i].length(); j++){ // RECORRE CADA VEZ QUE ENCUENTRA UN NUEVO CARACTER
-                int n_actual, n_siguiente = -1;
-                
-                n_actual = lineas[i].codePointAt(j);
-                if (estado == 0) {
-                     estado = estado_transicion(n_actual);
-                }
-                try{
-                    n_siguiente = lineas[i].codePointAt(j + 1); 
-                    
-                }catch(Exception e){
-                    
-                }
-                switch(estado){
-                    case 1:
-                            lexema = lexema + lineas[i].charAt(j);
-                            if ( (n_siguiente > 96 && n_siguiente < 123) || (n_siguiente > 64 && n_siguiente < 91) ){
+            for (int j = 0; j < lineas[i].length(); j++){ // RECORRE CADA VEZ QUE ENCUENTRA UN NUEVO CARACTER             
+                  lexema = lexema + lineas[i].charAt(j);
+                            if (lexema == "public" || lexema == "void" ){
                                 estado = 1;
                             }else{
                                 numero_token = 1;
-                                tipo = "cadena";
+                                tipo = "reservada";
                                 estado = 0;
                             } 
-                            break;
-                    case 2:
-                        lexema = lexema + lineas[i].charAt(j);
-                        if(n_siguiente > 47 && n_siguiente < 58){
-                            estado = 2;
-                        }else{
-                            numero_token = 2;
-                            tipo =  "entero";
-                            estado = 0;
-                        }
-                        break;
-                    case 100:
-                        estado = -2;
-                        break;
-                    case 999:
-                        lexema = String.valueOf(lineas[i].charAt(j)); 
-                        numero_token = 999;
-                        tipo = "error lexico";
-                        estado = 0;
-                        break;
-                }if (estado == 0){
+                                       
+                 }if (estado == 0){
                     lista_token.add(new Token(lexema, tipo));
                     lexema = "";
                     tipo = "";
@@ -80,12 +49,22 @@ public class Analizador {
                 if(estado == -2){
                     estado = 0;
                 }
-                }
-        
             }
-        }
+        }        
+
     
+    
+    public int estado_transicion (String n){
+        System.out.println("Entro al metodo");
+            if ( (n == "public") ){
+               System.out.println("Entro Transicion");
+            }  System.out.println("Retorna 1"); return 2 ;
+            
+                
+        }
+  
         
+    /*
         public int estado_transicion (int n){
             if ( (n > 96 && n < 123) || (n > 64 && n < 91) ){
                 return 1;
@@ -100,28 +79,36 @@ public class Analizador {
             }
         }
 
+    */
     
     public String[] separador(String texto, char separar){ // METODO PARA SEPARAR LA CADENA POR SALTOS DE LINEA
         String linea    =""; 
         int contador = 0;
         for (int i = 0; i< texto.length(); i++){ // RECORRER EL TEXTO QUE ESTAMOS RECIBIENDO
+          
             if (texto.charAt(i) == separar){ // CONTADOR DE CANTIDAD DE LINEAS EN NUESTRA CADENA
                 contador++;
+                System.out.println("Entro al metodo separar " + texto);
             }
         }
+      
         String [] cadenas = new String[contador]; // TOMAR EL TAMAÑO EL CONTADOR
         contador = 0;
         for (int i = 0; i  < texto.length(); i++){ // RECORRER DE NUEVO EL TEXTO
+            System.out.println("Entro al metodo separar " + texto);
             if(texto.charAt(i) != separar){
                 linea = linea + String.valueOf(texto.charAt(i)); //CONCATENAR
             }else{
                 cadenas[contador] = linea;
+                System.out.println(texto);
                 contador++;
                 linea = "";
             }
         }
         return cadenas;
     }
+    
+    
     
     
     

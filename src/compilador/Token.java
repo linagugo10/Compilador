@@ -40,7 +40,7 @@ public class Token {
 
     @Override
     public String toString() {
-        return "Token[" + "lexema=" + lexema + ", tipo=" + tipo + ']';
+        return "" + "Lexema=" + lexema + " " + ", Tipo=" + tipo + "";
     }
     
     
